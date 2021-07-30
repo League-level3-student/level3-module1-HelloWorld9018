@@ -68,7 +68,7 @@ public class _00_ArrayListDemo {
         
         // Add element into index 2
         numbers.add(2, 22222);
-        
+       
         for(Integer j : numbers){
             System.out.print(j + " ");
         }
