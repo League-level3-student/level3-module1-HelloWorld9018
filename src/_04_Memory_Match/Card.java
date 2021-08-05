@@ -123,6 +123,7 @@ public class Card extends JButton {
         if( this.faceUpIcon == null ) {
             return this.getValue() == otherCard.getValue();
         }
-        return (this.getValue() / 4) == (otherCard.getValue() / 4);
+        return (this.getValue() ) == (otherCard.getValue() );
+        
     }
 }
