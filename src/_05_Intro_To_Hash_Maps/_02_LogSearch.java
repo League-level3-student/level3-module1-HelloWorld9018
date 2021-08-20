@@ -108,7 +108,7 @@ public class _02_LogSearch implements ActionListener {
 			
 			if(IDlog.containsKey(numSearchID)) {
 				
-				JOptionPane.showMessageDialog(null, IDlog.keySet() + ",  " + IDlog.get(numSearchID), "ID search results", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, numSearchID + ",  " + IDlog.get(numSearchID), "ID search results", JOptionPane.PLAIN_MESSAGE);
 				//JOptionPane.showmess
 			}
 			else {
