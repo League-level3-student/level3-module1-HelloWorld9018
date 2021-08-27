@@ -42,4 +42,9 @@ public class CaliforniaWeather {
             System.out.println(cityName + " is " + datum.weatherSummary + " with a temperature of " + datum.temperatureF + " F");
         }
     }
+    
+    void createGUI() {
+    	//option dialog
+    	//or button/gui
+    }
 }

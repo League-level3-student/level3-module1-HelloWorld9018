@@ -32,29 +32,28 @@ public class MeetingScheduler {
     	HashMap <String , ArrayList<Integer>> person1times = person1.getSchedule();
     	HashMap <String, ArrayList<Integer>> person2times = person2.getSchedule();
     	
-    	ArrayList<String> timesAvailable2 = new ArrayList<>();
-    	//MeetingSchedulerTest availabilities = new MeetingSchedulerTest();
-    //	if(person1times.containsKey(person2times.)) {
-    		
-    //	}
+    	ArrayList<String> daysAvailable = new ArrayList<>();
     	
-    /*	for(String s: person2times.keySet()) {
-    		
-    		timesAvailable2.add(s);
-    		
-    		
+    	ArrayList<Integer> timesAvailable1 = new ArrayList<>();
+    	ArrayList<Integer> timesAvailable2 = new ArrayList<>();
     	
-    	}
-    	for (int i = 0; i<timesAvailable2.size(); i++) {
-    		for(int k = 0; k<person1times.size(); k++) {
-    		if(person1times.keySet(k).equals(timesAvailable2.get(i))) {
+    	for(String day : person1times.keySet()) {
+    		daysAvailable.add(day);
     		
+    		timesAvailable1 = person1times.get(day);
+    		timesAvailable2 = person2times.get(day);
+    		
+    		for(int i = 0; i< timesAvailable2.size(); i++) {
+    			if(timesAvailable1.contains(timesAvailable2.get(i))) {
+    				//println("");
+    				commonSchedule.addAvailability(day, timesAvailable2.get(i));
+    			}
     		}
-    		}
+    		
     	}
-    	*/
-    
     	
-        return null;
+    	return commonSchedule;
+    	
+    	
     }
 }
