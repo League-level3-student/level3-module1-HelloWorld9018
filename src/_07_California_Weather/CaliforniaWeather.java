@@ -1,12 +1,16 @@
 package _07_California_Weather;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /*
@@ -34,7 +38,7 @@ import javax.swing.JPanel;
  * temperature, you can get a free API key at: https://openweathermap.org/api 
  */
 
-public class CaliforniaWeather {
+public class CaliforniaWeather implements ActionListener {
     
     void start() {
         HashMap<String, WeatherData> weatherData = Utilities.getWeatherData();
@@ -52,12 +56,10 @@ public class CaliforniaWeather {
         createGUI();
     }
     
-    JPanel panels;
+   
     
-    final static String TEXTPANEL = "Card with JTextField";
-    final static String BUTTONPANEL = "Card with JButtons";
-    final static String SEARCHPANEL = "Card with search button";
-    
+    HashMap<String, JButton> buttonNameMatcher = new HashMap <String, JButton>();
+    JButton[] myButtons = new JButton[4];
     
     void createGUI() {
     	
@@ -65,51 +67,56 @@ public class CaliforniaWeather {
     	JFrame frame  = new JFrame("California Weather");
     	frame.setVisible(true);
     	
-    	panels = new JPanel();
+    	JPanel panels = new JPanel();
     	JLabel label = new JLabel("Filter results by...");
     	
-    	JPanel panelText = new JPanel();
-    	JPanel panelButtons = new JPanel();
-    	JPanel panelSearch = new JPanel();
-    	
-    	JButton button1 = new JButton("City");
-    	JButton button2 = new JButton("Weather Condition");
-    	JButton button3 = new JButton("Temperature");
-    	JButton button4 = new JButton("SEARCH");
-    	
-    	//titling Jcompononets
-    	/*frame.setTitle("California Weather");
-    	
-    	label.setText("Filter results by...");
-    	
-    	button1.setText("City");
-    	button2.setText("Weather Condition");
-    	button3.setText("Temperature");
-    	
-    	button4.setText("SEARCH");*/
-    	
-    	//Adding JComponents
-  
     	frame.add(panels);
-    	//panels.setLayout(new BoxLayout(frame, BoxLayout.Y_AXIS));
+    	
     	panels.add(label);
-    	panels.add(button1);
-    	panels.add(button2);
-    	panels.add(button3);
-    	panels.add(button4);
-    	
-   /* 	panels.add(panelText, TEXTPANEL);
-    	panels.add(panelButtons, BUTTONPANEL);
-    	panels.add(panelSearch, SEARCHPANEL);*/
-    	
-    	frame.pack();
-    	//panels.setLayout(new CardLayout());
-
     	
     	
-    	//frame.pack();
+    	String[] buttonNames = {"City", "Weather Condition", "Temperature", "SEARCH"};
+    	
+    	
+    	for(int i = 0; i < myButtons.length; i++) {
+    		myButtons[i] = new JButton(buttonNames[i]);
+    		myButtons[i].addActionListener(this);
+    		panels.add(myButtons[i]);
+    		buttonNameMatcher.put(buttonNames[i], myButtons[i]);
+    	}
+   
+    	
+    	frame.setSize(new Dimension(500, 110));
+    
     	
     	//option dialog
     	//or button/gui
     }
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		JButton selectedButton = (JButton) e.getSource();
+		if(buttonNameMatcher.get("City") == selectedButton) {
+			
+			System.out.println("City is pressed");
+			String cityName = JOptionPane.showInputDialog("Enter a city name in the textbox below");
+			
+		}
+		else if(buttonNameMatcher.get("Weather Condition") == selectedButton) {
+			System.out.println("weather is pressed");
+			String weatherCondition  = JOptionPane.showInputDialog("Enter a weather condition in the textbox below");
+		}
+		else if(buttonNameMatcher.get("Temperature") == selectedButton) {
+			System.out.println("temperature is pressed");
+			String temperature = JOptionPane.showInputDialog("Enter a temperature in the textbox below");
+		}
+		else{
+			//SEARCH
+			System.out.println("SEARCH is pressed");
+			
+		}
+	}
+	
 }
