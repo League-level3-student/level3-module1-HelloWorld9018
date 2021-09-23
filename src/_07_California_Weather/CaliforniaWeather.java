@@ -39,10 +39,12 @@ import javax.swing.JPanel;
  */
 
 public class CaliforniaWeather implements ActionListener {
-    
+	HashMap<String, WeatherData> weatherData = Utilities.getWeatherData();
     void start() {
-        HashMap<String, WeatherData> weatherData = Utilities.getWeatherData();
         
+        JPopups pops = new JPopups();
+        pops.duoInputPanel();
+    	
         // All city keys have the first letter capitalized of each word
         String cityName = Utilities.capitalizeWords( "National City" );
         WeatherData datum = weatherData.get(cityName);
@@ -53,7 +55,7 @@ public class CaliforniaWeather implements ActionListener {
             System.out.println(cityName + " is " + datum.weatherSummary + " with a temperature of " + datum.temperatureF + " F");
         }
         
-        createGUI();
+        //createGUI();
     }
     
    
@@ -102,21 +104,33 @@ public class CaliforniaWeather implements ActionListener {
 			
 			System.out.println("City is pressed");
 			String cityName = JOptionPane.showInputDialog("Enter a city name in the textbox below");
+			calculateData (cityName, 0);
 			
 		}
 		else if(buttonNameMatcher.get("Weather Condition") == selectedButton) {
 			System.out.println("weather is pressed");
 			String weatherCondition  = JOptionPane.showInputDialog("Enter a weather condition in the textbox below");
+			calculateData(weatherCondition, 1);
 		}
 		else if(buttonNameMatcher.get("Temperature") == selectedButton) {
 			System.out.println("temperature is pressed");
-			String temperature = JOptionPane.showInputDialog("Enter a temperature in the textbox below");
+			String temperature1 = JOptionPane.showInputDialog("Enter a minimum temperature in the textbox below");
+			String temperature2 = JOptionPane.showInputDialog(null, "Enter a maximum temperature in the textbox below");
+			//calculateData(temperature, 2);
 		}
 		else{
 			//SEARCH
 			System.out.println("SEARCH is pressed");
 			
 		}
+	}
+	
+	void calculateData (String input, int type) {
+		if(type == 0) {
+		String inputedCityName = Utilities.capitalizeWords(input);
+		}
+		
+		
 	}
 	
 }
