@@ -40,10 +40,9 @@ import javax.swing.JPanel;
 
 public class CaliforniaWeather implements ActionListener {
 	HashMap<String, WeatherData> weatherData = Utilities.getWeatherData();
+	JPopups pops = new JPopups();
+	
     void start() {
-        
-        JPopups pops = new JPopups();
-        pops.duoInputPanel();
     	
         // All city keys have the first letter capitalized of each word
         String cityName = Utilities.capitalizeWords( "National City" );
@@ -55,13 +54,13 @@ public class CaliforniaWeather implements ActionListener {
             System.out.println(cityName + " is " + datum.weatherSummary + " with a temperature of " + datum.temperatureF + " F");
         }
         
-        //createGUI();
+        createGUI();
     }
     
    
     
     HashMap<String, JButton> buttonNameMatcher = new HashMap <String, JButton>();
-    JButton[] myButtons = new JButton[4];
+    JButton[] myButtons = new JButton[3];
     
     void createGUI() {
     	
@@ -69,27 +68,27 @@ public class CaliforniaWeather implements ActionListener {
     	JFrame frame  = new JFrame("California Weather");
     	frame.setVisible(true);
     	
-    	JPanel panels = new JPanel();
-    	JLabel label = new JLabel("Filter results by...");
+    	JPanel panel = new JPanel();
+    	JLabel label = new JLabel("Search by...");
     	
-    	frame.add(panels);
+    	frame.add(panel);
     	
-    	panels.add(label);
+    	panel.add(label);
     	
     	
-    	String[] buttonNames = {"City", "Weather Condition", "Temperature", "SEARCH"};
+    	String[] buttonNames = {"City", "Weather Condition", "Temperature"};
     	
     	
     	for(int i = 0; i < myButtons.length; i++) {
     		myButtons[i] = new JButton(buttonNames[i]);
     		myButtons[i].addActionListener(this);
-    		panels.add(myButtons[i]);
+    		panel.add(myButtons[i]);
     		buttonNameMatcher.put(buttonNames[i], myButtons[i]);
     	}
    
     	
-    	frame.setSize(new Dimension(500, 110));
-    
+    	//frame.setSize(new Dimension(500, 110));
+    	frame.pack();
     	
     	//option dialog
     	//or button/gui
@@ -112,17 +111,13 @@ public class CaliforniaWeather implements ActionListener {
 			String weatherCondition  = JOptionPane.showInputDialog("Enter a weather condition in the textbox below");
 			calculateData(weatherCondition, 1);
 		}
-		else if(buttonNameMatcher.get("Temperature") == selectedButton) {
+		else {
 			System.out.println("temperature is pressed");
-			String temperature1 = JOptionPane.showInputDialog("Enter a minimum temperature in the textbox below");
-			String temperature2 = JOptionPane.showInputDialog(null, "Enter a maximum temperature in the textbox below");
+			
+	        pops.duoInputPanel();
 			//calculateData(temperature, 2);
 		}
-		else{
-			//SEARCH
-			System.out.println("SEARCH is pressed");
-			
-		}
+		
 	}
 	
 	void calculateData (String input, int type) {
