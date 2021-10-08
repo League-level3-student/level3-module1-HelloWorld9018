@@ -40,13 +40,13 @@ import javax.swing.JPanel;
 
 public class CaliforniaWeather implements ActionListener {
 	HashMap<String, WeatherData> weatherData = Utilities.getWeatherData();
-	JPopups pops = new JPopups();
-	
+	JPopups pops = new JPopups(this);
+	WeatherData datum;
     void start() {
     	
         // All city keys have the first letter capitalized of each word
         String cityName = Utilities.capitalizeWords( "National City" );
-        WeatherData datum = weatherData.get(cityName);
+         datum = weatherData.get(cityName);
         
         if( datum == null ) {
             System.out.println("Unable to find weather data for: " + cityName);
@@ -115,16 +115,41 @@ public class CaliforniaWeather implements ActionListener {
 			System.out.println("temperature is pressed");
 			
 	        pops.duoInputPanel();
-			//calculateData(temperature, 2);
+			
 		}
 		
 	}
 	
 	void calculateData (String input, int type) {
 		if(type == 0) {
-		String inputedCityName = Utilities.capitalizeWords(input);
-		}
+			//correct spelling?
+			String fixedCityName = Utilities.capitalizeWords(input);
+			datum = weatherData.get(fixedCityName);
+			if( datum == null ) {
+            JOptionPane.showMessageDialog(null, "Unable to find weather data for: \"" + fixedCityName + "\"", "Error", JOptionPane.ERROR_MESSAGE);
+			} else {
+            JOptionPane.showMessageDialog(null, fixedCityName + " is " + datum.weatherSummary + " with a temperature of " + datum.temperatureF + " F", "Search Results for: " + fixedCityName , JOptionPane.PLAIN_MESSAGE);
+        }
 		
+		}
+		else if(type == 1) {
+			String fixedCondition = Utilities.capitalizeWords(input);
+			String cityList = "";
+			int lineLength = 0;
+			//datum = weatherData.get(fixedCondition);
+			for(String c: weatherData.keySet()) {
+				
+				if(weatherData.get(c).weatherSummary.equals(fixedCondition)) {
+					cityList+= c + ", ";
+					lineLength++;
+				}
+			}
+			JOptionPane.showMessageDialog(null, cityList);
+			//JOptionPane.showMessageDialog(null, weatherData.containsKey(fixedCondition));
+		}
+		else if(type == 2) {
+			
+		}
 		
 	}
 	

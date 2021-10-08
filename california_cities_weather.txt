@@ -366,7 +366,7 @@ Bakersfield, Partly Cloudy, 49.43
 Baldwin Park, Overcast, 65.79
 Banning, Overcast, 64.65
 Bay Point, Clear, 64.81
-Bay Point, Clear, 64.64
+Bay Point, Clear, 64.64ja
 Beaumont, Overcast, 65.06
 Bell, Overcast, 65.25
 Bell Gardens, Overcast, 65.18

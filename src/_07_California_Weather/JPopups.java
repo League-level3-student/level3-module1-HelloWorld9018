@@ -12,10 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class JPopups implements ActionListener {
-	CaliforniaWeather caliWeather = new CaliforniaWeather();
+	CaliforniaWeather weather;
 	JTextField textFieldMin = new JTextField();
 	JTextField textFieldMax = new JTextField();
 	JFrame frame1  = new JFrame();
+	JPopups (CaliforniaWeather weather){
+		this.weather = weather;
+	}
 	void duoInputPanel(){
 		
 		
@@ -53,7 +56,7 @@ public class JPopups implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		caliWeather.calculateData(textFieldMin.getText() + "," + textFieldMax.getText(), 2);
+	weather.calculateData(textFieldMin.getText() + "," + textFieldMax.getText(), 2);
 		frame1.dispose();
 	}
 }
