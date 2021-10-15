@@ -4,6 +4,7 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.BoxLayout;
@@ -119,7 +120,7 @@ public class CaliforniaWeather implements ActionListener {
 		}
 		
 	}
-	
+	ArrayList <String> repeatedCityNames = new ArrayList<String>();
 	void calculateData (String input, int type) {
 		if(type == 0) {
 			//correct spelling?
@@ -133,24 +134,60 @@ public class CaliforniaWeather implements ActionListener {
 		
 		}
 		else if(type == 1) {
+			
 			String fixedCondition = Utilities.capitalizeWords(input);
 			String cityList = "";
 			int lineLength = 0;
 			//datum = weatherData.get(fixedCondition);
+			
 			for(String c: weatherData.keySet()) {
-				
 				if(weatherData.get(c).weatherSummary.equals(fixedCondition)) {
-					cityList+= c + ", ";
-					lineLength++;
+					repeatedCityNames.add(c);
 				}
 			}
-			JOptionPane.showMessageDialog(null, cityList);
-			//JOptionPane.showMessageDialog(null, weatherData.containsKey(fixedCondition));
-		}
-		else if(type == 2) {
+			repeatedCityNames = eliminateDuplicates(repeatedCityNames);
+			
+			for(String a: repeatedCityNames) {
+				//********************************
+			cityList+= a + ", ";
+			lineLength++;
+			
+				if(lineLength%5 == 0) {
+				cityList += "\n";
+				}
+			}
+			JOptionPane.showMessageDialog(null, cityList, "Filter by Weather Condititon: " + fixedCondition, JOptionPane.PLAIN_MESSAGE);
 			
 		}
 		
+		else {
+			//type = 2
+		}
+		
+	}
+
+	//ArrayList<String> processedCityNames = new ArrayList<String>();
+	private ArrayList<String> eliminateDuplicates(ArrayList<String> repeatedCityNames) {
+		
+		// TODO Auto-generated method stub
+		ArrayList<String> processedCityNames = new ArrayList<String>();
+		//String holder;
+		
+			
+			for(String k2: repeatedCityNames) {
+				String cityName = k2;
+				if(Character.isDigit(cityName.charAt(cityName.length()-1))) {
+					cityName = cityName.substring(0, cityName.length()-1);
+				}
+				if(!processedCityNames.contains(cityName)) {
+					processedCityNames.add(cityName);
+					
+				}	
+			}
+			//***************************************REMOVE DUPLICATES
+			
+		
+		return repeatedCityNames;
 	}
 	
 }
