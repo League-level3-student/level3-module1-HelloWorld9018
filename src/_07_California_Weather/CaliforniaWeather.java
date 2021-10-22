@@ -99,29 +99,35 @@ public class CaliforniaWeather implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		
 		JButton selectedButton = (JButton) e.getSource();
-		if(buttonNameMatcher.get("City") == selectedButton) {
+		
+			if(buttonNameMatcher.get("City") == selectedButton) {
 			
-			System.out.println("City is pressed");
-			String cityName = JOptionPane.showInputDialog("Enter a city name in the textbox below");
-			calculateData (cityName, 0);
+				System.out.println("City is pressed");
+				String cityName = JOptionPane.showInputDialog("Enter a city name in the textbox below");
+				calculateData (cityName, 0);
 			
-		}
-		else if(buttonNameMatcher.get("Weather Condition") == selectedButton) {
-			System.out.println("weather is pressed");
-			String weatherCondition  = JOptionPane.showInputDialog("Enter a weather condition in the textbox below");
-			calculateData(weatherCondition, 1);
-		}
-		else {
-			System.out.println("temperature is pressed");
+			}
+		
+			else if(buttonNameMatcher.get("Weather Condition") == selectedButton) {
+				System.out.println("weather is pressed");
+				String weatherCondition  = JOptionPane.showInputDialog("Enter a weather condition in the textbox below");
+				calculateData(weatherCondition, 1);
+			}
+		
+			else {
+				System.out.println("temperature is pressed");
 			
-	        pops.duoInputPanel();
-			
-		}
+				pops.duoInputPanel();
+			}
 		
 	}
+	
 	ArrayList <String> repeatedCityNames = new ArrayList<String>();
+	
 	void calculateData (String input, int type) {
+		
 		if(type == 0) {
 			//correct spelling?
 			String fixedCityName = Utilities.capitalizeWords(input);
@@ -129,8 +135,8 @@ public class CaliforniaWeather implements ActionListener {
 			if( datum == null ) {
             JOptionPane.showMessageDialog(null, "Unable to find weather data for: \"" + fixedCityName + "\"", "Error", JOptionPane.ERROR_MESSAGE);
 			} else {
-            JOptionPane.showMessageDialog(null, fixedCityName + " is " + datum.weatherSummary + " with a temperature of " + datum.temperatureF + " F", "Search Results for: " + fixedCityName , JOptionPane.PLAIN_MESSAGE);
-        }
+            JOptionPane.showMessageDialog(null, fixedCityName + " is " + datum.weatherSummary + " with a temperature of " + datum.temperatureF + "* F", "Search Results for: " + fixedCityName , JOptionPane.PLAIN_MESSAGE);
+			}
 		
 		}
 		else if(type == 1) {
@@ -148,7 +154,7 @@ public class CaliforniaWeather implements ActionListener {
 			repeatedCityNames = eliminateDuplicates(repeatedCityNames);
 			
 			for(String a: repeatedCityNames) {
-				//********************************
+				
 			cityList+= a + ", ";
 			lineLength++;
 			
@@ -160,20 +166,50 @@ public class CaliforniaWeather implements ActionListener {
 			
 		}
 		
+		else if (type == 2){
+			
+			int breaker = input.charAt(',');
+			String StrMin = null;
+			String StrMax = null;
+			for(int i = 0; i<breaker-1; i++) {
+				StrMin += input.charAt(i);
+				
+					
+				}
+			for(int k = breaker+1; k < input.length(); k++) {
+				StrMax += input.charAt(k);
+				
+			}
+				
+			String cityList = null;
+			
+			double doubMin = Double.parseDouble(StrMin);
+			double doubMax = Double.parseDouble(StrMax);
+			
+			for(String s: weatherData.keySet()) {
+				for(double n = doubMin; n < doubMax; n++) {
+					if(weatherData.get(s).temperatureF==(n)) {
+						cityList+=weatherData.get(s);
+					}	
+				}
+			}
+			
+			JOptionPane.showMessageDialog(null, cityList, "Filter by Weather Condition: " + StrMin + "-" + StrMax, JOptionPane.PLAIN_MESSAGE);
+			//******************************************************************************************************************************************DOES_NOT_WORK!!!
+		}
+		
 		else {
-			//type = 2
+			//type error
 		}
 		
 	}
 
-	//ArrayList<String> processedCityNames = new ArrayList<String>();
+	
 	private ArrayList<String> eliminateDuplicates(ArrayList<String> repeatedCityNames) {
 		
 		// TODO Auto-generated method stub
 		ArrayList<String> processedCityNames = new ArrayList<String>();
-		//String holder;
 		
-			
 			for(String k2: repeatedCityNames) {
 				String cityName = k2;
 				if(Character.isDigit(cityName.charAt(cityName.length()-1))) {
@@ -184,10 +220,8 @@ public class CaliforniaWeather implements ActionListener {
 					
 				}	
 			}
-			//***************************************REMOVE DUPLICATES
 			
-		
-		return repeatedCityNames;
+		return processedCityNames;
 	}
 	
 }

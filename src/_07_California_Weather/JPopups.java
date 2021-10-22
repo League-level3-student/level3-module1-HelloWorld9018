@@ -56,6 +56,7 @@ public class JPopups implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		
 	weather.calculateData(textFieldMin.getText() + "," + textFieldMax.getText(), 2);
 		frame1.dispose();
 	}
