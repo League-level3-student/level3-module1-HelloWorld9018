@@ -41,7 +41,7 @@ import javax.swing.JPanel;
 
 public class CaliforniaWeather implements ActionListener {
 	HashMap<String, WeatherData> weatherData = Utilities.getWeatherData();
-	JPopups pops = new JPopups(this);
+	JPopups pops;
 	WeatherData datum;
     void start() {
     	
@@ -118,13 +118,14 @@ public class CaliforniaWeather implements ActionListener {
 		
 			else {
 				System.out.println("temperature is pressed");
-			
+				pops = new JPopups(this);
 				pops.duoInputPanel();
 			}
 		
 	}
 	
 	ArrayList <String> repeatedCityNames = new ArrayList<String>();
+	int lineLength = 0;
 	
 	void calculateData (String input, int type) {
 		
@@ -135,15 +136,15 @@ public class CaliforniaWeather implements ActionListener {
 			if( datum == null ) {
             JOptionPane.showMessageDialog(null, "Unable to find weather data for: \"" + fixedCityName + "\"", "Error", JOptionPane.ERROR_MESSAGE);
 			} else {
-            JOptionPane.showMessageDialog(null, fixedCityName + " is " + datum.weatherSummary + " with a temperature of " + datum.temperatureF + "* F", "Search Results for: " + fixedCityName , JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, fixedCityName + " is " + datum.weatherSummary + " with a temperature of " + datum.temperatureF + "°F", "Search Results for: " + fixedCityName , JOptionPane.PLAIN_MESSAGE);
 			}
 		
 		}
 		else if(type == 1) {
-			
+			//condition
 			String fixedCondition = Utilities.capitalizeWords(input);
 			String cityList = "";
-			int lineLength = 0;
+			
 			//datum = weatherData.get(fixedCondition);
 			
 			for(String c: weatherData.keySet()) {
@@ -162,16 +163,32 @@ public class CaliforniaWeather implements ActionListener {
 				cityList += "\n";
 				}
 			}
-			JOptionPane.showMessageDialog(null, cityList, "Filter by Weather Condititon: " + fixedCondition, JOptionPane.PLAIN_MESSAGE);
 			
+			if(lineLength == 1) {
+				cityList = cityList.substring(0, cityList.length()-2);
+			}
+			
+			if(cityList == "") {
+				JOptionPane.showMessageDialog(null, "No results found", "Filter by Weather Condititon: " + fixedCondition, JOptionPane.ERROR_MESSAGE);
+			}
+			else{
+			JOptionPane.showMessageDialog(null, cityList, "Filter by Weather Condititon: " + fixedCondition, JOptionPane.PLAIN_MESSAGE);
+			}
+			repeatedCityNames.clear();
+			lineLength = 0;
 		}
 		
 		else if (type == 2){
+		/*	3. Create a way for the user to enter a minimum and maximum temperature
+			 * and then list the cities that have temperatures within that range
+			 * Example: User: minimum temperature °F = 65.0, max temperature °F = 70.0
+			 *          Program: Fortana, Glendale, Escondido, Del Mar, ...
+			 *    */      
 			
-			int breaker = input.charAt(',');
-			String StrMin = null;
-			String StrMax = null;
-			for(int i = 0; i<breaker-1; i++) {
+			int breaker = input.indexOf(',');
+			String StrMin = "";
+			String StrMax = "";
+			for(int i = 0; i<breaker; i++) {
 				StrMin += input.charAt(i);
 				
 					
@@ -181,21 +198,45 @@ public class CaliforniaWeather implements ActionListener {
 				
 			}
 				
-			String cityList = null;
+			String cityList = "";
 			
 			double doubMin = Double.parseDouble(StrMin);
 			double doubMax = Double.parseDouble(StrMax);
 			
 			for(String s: weatherData.keySet()) {
-				for(double n = doubMin; n < doubMax; n++) {
-					if(weatherData.get(s).temperatureF==(n)) {
-						cityList+=weatherData.get(s);
-					}	
+				if(weatherData.get(s).temperatureF >= doubMin && weatherData.get(s).temperatureF <= doubMax) {
+					//cityList+=s;
+					repeatedCityNames.add(s);
+				}	
+			}
+			
+			repeatedCityNames = eliminateDuplicates(repeatedCityNames);
+			
+			for(String a: repeatedCityNames) {
+				
+			cityList+= a + ", ";
+			lineLength++;
+			
+				if(lineLength%5 == 0) {
+				cityList += "\n";
 				}
 			}
 			
-			JOptionPane.showMessageDialog(null, cityList, "Filter by Weather Condition: " + StrMin + "-" + StrMax, JOptionPane.PLAIN_MESSAGE);
-			//******************************************************************************************************************************************DOES_NOT_WORK!!!
+			
+			if(lineLength == 1) {
+				cityList = cityList.substring(0, cityList.length()-2);
+			}
+			
+			if(cityList == "") {
+				JOptionPane.showMessageDialog(null, "No results found", "Filter by Weather Condition: " + StrMin + "-" + StrMax + "°F", JOptionPane.ERROR_MESSAGE);
+			}
+			
+			else {
+			JOptionPane.showMessageDialog(null, cityList, "Filter by Weather Condition: " + StrMin + "-" + StrMax + "°F", JOptionPane.PLAIN_MESSAGE);
+			}
+			
+			repeatedCityNames.clear();
+			lineLength = 0;
 		}
 		
 		else {

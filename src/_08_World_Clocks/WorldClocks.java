@@ -34,6 +34,8 @@ import javax.swing.Timer;
  * https://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html
  */
 
+//MY NOTES: capitalize city name. use my own duo input jpopup for (city, country). create method that turns inputed country name into an acceptable acronym.
+
 public class WorldClocks implements ActionListener {
     ClockUtilities clockUtil;
     Timer timer;
