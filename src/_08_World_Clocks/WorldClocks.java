@@ -3,9 +3,11 @@ package _08_World_Clocks;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -44,10 +46,17 @@ public class WorldClocks implements ActionListener {
     JFrame frame;
     JPanel panel;
     JTextArea textArea;
+    JButton button; 
+    JPopups popups;
     
     String city;
     String dateStr;
     String timeStr;
+    
+    int numOfClocks  = 1;
+    
+    
+    HashMap<String, TimeZone> timeZones = new HashMap<String, TimeZone>();
     
     public WorldClocks() {
         clockUtil = new ClockUtilities();
@@ -62,9 +71,11 @@ public class WorldClocks implements ActionListener {
         dateStr = dayOfWeek + " " + month + " " + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.YEAR);
         
         System.out.println(dateStr);
-
+        
+        createGUI();
+        
         // Sample starter program
-        frame = new JFrame();
+        /*frame = new JFrame();
         panel = new JPanel();
         textArea = new JTextArea();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,13 +83,55 @@ public class WorldClocks implements ActionListener {
         frame.setSize(100, 100);
         frame.add(panel);
         panel.add(textArea);
-        textArea.setText(city + "\n" + dateStr);
+        textArea.setText(city + "\n" + dateStr);*/
         
-        // This Timer object is set to call the actionPerformed() method every
+        // This Timer object is set to ctimeZonesHashmapall the actionPerformed() method every
         // 1000 milliseconds
         timer = new Timer(1000, this);
         timer.start();
     }
+    
+    
+    public void createGUI() {
+    /*	 Gives the user the ability to add a city to the display. One possible
+    	 *    way to do this is to create a HashMap of city names and their
+    	 *    corresponding time zones, e.g. HashMap<String, TimeZone>, then use each
+    	 *    city's TimeZone to get the current date/time every second using a
+    	 *    Timer object (see example code below). */
+    	
+    	
+    	
+    	frame = new JFrame();
+        panel = new JPanel();
+        button = new JButton("Add Time Zone");
+        button.addActionListener(this);
+        frame.add(panel);
+        
+        
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        frame.setSize(100, 100);
+       
+        for(String s: timeZones.keySet()) {
+        	timeZone = timeZones.get(s);
+        	Calendar calendar = Calendar.getInstance(timeZone);
+        	String month  = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+        	String dayOfWeek = calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+        	dateStr = dayOfWeek + " " + month + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.YEAR);
+        	
+        	textArea = new JTextArea();
+            textArea.setText(s + "\n" + dateStr);
+            panel.add(textArea);
+        }
+        
+     /*   for (int i = 1; i < numOfClocks; i++) {
+        	textArea = new JTextArea();
+      //  	textArea.setText(timesZones.keySet()[i] + "\n" + dateStr);
+            panel.add(textArea);*/
+          
+        }
+        
+    //Work on JPopups. Make button show and work. Make button able to update createGUI to add new time zone clock. Allow user input in JPopup add to timeZones Hashmap. 
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
@@ -90,5 +143,11 @@ public class WorldClocks implements ActionListener {
         System.out.println(timeStr);
         textArea.setText(city + "\n" + dateStr + "\n" + timeStr);
         frame.pack();
+        
+        if(button == arg0.getSource()) {
+        	numOfClocks++;
+        	popups = new JPopups();
+        }
+        
     }
 }
