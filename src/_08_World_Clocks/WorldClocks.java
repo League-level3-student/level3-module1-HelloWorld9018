@@ -1,5 +1,6 @@
 package _08_World_Clocks;
 
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
@@ -54,7 +55,7 @@ public class WorldClocks implements ActionListener {
     String timeStr;
     
     int numOfClocks  = 1;
-    
+    String location;
     
     HashMap<String, TimeZone> timeZones = new HashMap<String, TimeZone>();
     
@@ -62,7 +63,8 @@ public class WorldClocks implements ActionListener {
         clockUtil = new ClockUtilities();
 
         // The format for the city must be: city, country (all caps)
-        city = "Chicago, US";
+        
+    /*    city = "Chicago, US";
         timeZone = clockUtil.getTimeZoneFromCityName(city);
         
         Calendar calendar = Calendar.getInstance(timeZone);
@@ -71,6 +73,7 @@ public class WorldClocks implements ActionListener {
         dateStr = dayOfWeek + " " + month + " " + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.YEAR);
         
         System.out.println(dateStr);
+        */
         
         createGUI();
         
@@ -104,9 +107,11 @@ public class WorldClocks implements ActionListener {
     	frame = new JFrame();
         panel = new JPanel();
         button = new JButton("Add Time Zone");
-        button.addActionListener(this);
-        frame.add(panel);
         
+        button.addActionListener(this);
+        
+        frame.add(panel);
+        panel.add(button);
         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -118,7 +123,7 @@ public class WorldClocks implements ActionListener {
         	String month  = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
         	String dayOfWeek = calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
         	dateStr = dayOfWeek + " " + month + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.YEAR);
-        	
+        	//will it override previous textArea of will it add? May have to create arraylist of JtextAreas.
         	textArea = new JTextArea();
             textArea.setText(s + "\n" + dateStr);
             panel.add(textArea);
@@ -135,19 +140,66 @@ public class WorldClocks implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
-        Calendar c = Calendar.getInstance(timeZone);
+     
+        
+        if(button == arg0.getSource()) {
+        	numOfClocks++;
+        	popups = new JPopups(this);
+        	popups.duoInputPanel("Add New Time Zone", "City:", "Country:", "ENTER");
+        }
+        
+        
+        
+    }
+    
+    
+    void createNewClock(String city, String country){
+    	System.out.println("adding new clock");
+    	location = fixCapitalization(city, country);
+    	
+    	timeZone = clockUtil.getTimeZoneFromCityName(location);
+    	timeZones.put(city, timeZone);
+    	
+    	Calendar c = Calendar.getInstance(timeZone);
         String militaryTime = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND);
         String twelveHourTime = " [" + c.get(Calendar.HOUR) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + "]";
         timeStr = militaryTime + twelveHourTime;
         
         System.out.println(timeStr);
+        textArea = new JTextArea();
         textArea.setText(city + "\n" + dateStr + "\n" + timeStr);
-        frame.pack();
-        
-        if(button == arg0.getSource()) {
-        	numOfClocks++;
-        	popups = new JPopups();
-        }
-        
+        panel.add(textArea);
+        ////////////////weird stuff I added rn
+       // frame.pack();
+    	//frame.setVisible(true);
+    	//frame.dispose();
+    	//createGUI();
+    	
     }
+    
+    String fixCapitalization(String city, String country) {
+    	String endCityLetters = "";
+    	String firstCityLetter = city.substring(0);
+    	firstCityLetter.toUpperCase();
+    	for(int i = 1; i < city.length(); i++) {
+    		endCityLetters+=city.charAt(i);
+    	}
+    	
+    	String fixedCity = firstCityLetter + endCityLetters;
+    	
+    	String endCountryLetters = "";
+    	String firstCountryLetter = country.substring(0);
+    	firstCountryLetter.toUpperCase();
+    	for (int i =  1; i<country.length(); i++) {
+    		endCountryLetters += country.charAt(i);
+    	}
+    	
+    	String fixedCountry = firstCountryLetter + endCountryLetters;
+    	
+    	String fixedLocation = fixedCity + ", " + fixedCountry;
+    	
+    	return fixedLocation;
+    
+    }
+    
 }
