@@ -3,6 +3,7 @@ package _08_World_Clocks;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -58,6 +59,7 @@ public class WorldClocks implements ActionListener {
     String location;
     
     HashMap<String, TimeZone> timeZones = new HashMap<String, TimeZone>();
+    ArrayList<JTextArea> myTextAreas = new ArrayList<JTextArea>();
     
     public WorldClocks() {
         clockUtil = new ClockUtilities();
@@ -75,7 +77,7 @@ public class WorldClocks implements ActionListener {
         System.out.println(dateStr);
         */
         
-        createGUI();
+        drawGUI();
         
         // Sample starter program
         /*frame = new JFrame();
@@ -95,7 +97,7 @@ public class WorldClocks implements ActionListener {
     }
     
     
-    public void createGUI() {
+    public void drawGUI() {
     /*	 Gives the user the ability to add a city to the display. One possible
     	 *    way to do this is to create a HashMap of city names and their
     	 *    corresponding time zones, e.g. HashMap<String, TimeZone>, then use each
@@ -124,9 +126,14 @@ public class WorldClocks implements ActionListener {
         	String dayOfWeek = calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
         	dateStr = dayOfWeek + " " + month + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.YEAR);
         	//will it override previous textArea of will it add? May have to create arraylist of JtextAreas.
-        	textArea = new JTextArea();
-            textArea.setText(s + "\n" + dateStr);
-            panel.add(textArea);
+        	JTextArea area = new JTextArea();
+        	area.setText(s + "\n" + dateStr);
+        	myTextAreas.add(area); 
+            
+        }
+        
+        for(JTextArea b: myTextAreas) {
+        	panel.add(b);
         }
         
      /*   for (int i = 1; i < numOfClocks; i++) {
@@ -160,24 +167,27 @@ public class WorldClocks implements ActionListener {
     	timeZone = clockUtil.getTimeZoneFromCityName(location);
     	timeZones.put(city, timeZone);
     	
-    	Calendar c = Calendar.getInstance(timeZone);
-        String militaryTime = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND);
-        String twelveHourTime = " [" + c.get(Calendar.HOUR) + ":" + c.get(Calendar.MINUTE) + ":" + c.get(Calendar.SECOND) + "]";
-        timeStr = militaryTime + twelveHourTime;
-        
-        System.out.println(timeStr);
-        textArea = new JTextArea();
-        textArea.setText(city + "\n" + dateStr + "\n" + timeStr);
-        panel.add(textArea);
-        ////////////////weird stuff I added rn
-       // frame.pack();
-    	//frame.setVisible(true);
-    	//frame.dispose();
-    	//createGUI();
     	
+    	
+    	frame.dispose();
+    	drawGUI();
+    	
+
     }
     
     String fixCapitalization(String city, String country) {
+    	
+    	String[] citySplit = city.split(" ");
+    	//String city1 = citySplit[1];
+    	//String city2 = citySplit[2];
+    	
+    	for(int i = 0; i<citySplit.length; i++) {
+    		citySplit[i].charAt(0).toUpperCase();
+    		//this is definetly wrong, put you get the idea. I need to capitalize the first character of the string
+    	}
+    	
+    	/////////////////// WORK ON FIXING THIS PART!!!  capitalize begining of each word of the city name
+    	
     	String endCityLetters = "";
     	String firstCityLetter = city.substring(0);
     	firstCityLetter.toUpperCase();
