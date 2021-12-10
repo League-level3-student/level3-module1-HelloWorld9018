@@ -1,6 +1,7 @@
 package _08_World_Clocks;
 
 import java.awt.TextArea;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public class WorldClocks implements ActionListener {
     String location;
     
     HashMap<String, TimeZone> timeZones = new HashMap<String, TimeZone>();
+   // HashMap<String, String> timeStrings = new HashMap<String, String>();
     ArrayList<JTextArea> myTextAreas = new ArrayList<JTextArea>();
     
     public WorldClocks() {
@@ -76,7 +78,7 @@ public class WorldClocks implements ActionListener {
         
         System.out.println(dateStr);
         */
-        
+       
         drawGUI();
         
         // Sample starter program
@@ -98,15 +100,13 @@ public class WorldClocks implements ActionListener {
     
     
     public void drawGUI() {
+    	//frame.dispose();
     /*	 Gives the user the ability to add a city to the display. One possible
     	 *    way to do this is to create a HashMap of city names and their
     	 *    corresponding time zones, e.g. HashMap<String, TimeZone>, then use each
     	 *    city's TimeZone to get the current date/time every second using a
     	 *    Timer object (see example code below). */
-    	
-    	
-    	
-    	frame = new JFrame();
+    	 frame = new JFrame("World Time Zones");
         panel = new JPanel();
         button = new JButton("Add Time Zone");
         
@@ -124,30 +124,65 @@ public class WorldClocks implements ActionListener {
         	Calendar calendar = Calendar.getInstance(timeZone);
         	String month  = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
         	String dayOfWeek = calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
-        	dateStr = dayOfWeek + " " + month + calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.YEAR);
-        	//will it override previous textArea of will it add? May have to create arraylist of JtextAreas.
+        	dateStr = dayOfWeek + " " + month + " " +  calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.YEAR);
+        	timeStr = " [" + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND) + "]";
+     
         	JTextArea area = new JTextArea();
-        	area.setText(s + "\n" + dateStr);
+        	area.setText(s  + timeStr + "\n" + dateStr);
         	myTextAreas.add(area); 
             
         }
         
+       // updateArea();
+        
         for(JTextArea b: myTextAreas) {
         	panel.add(b);
         }
-        
-     /*   for (int i = 1; i < numOfClocks; i++) {
-        	textArea = new JTextArea();
-      //  	textArea.setText(timesZones.keySet()[i] + "\n" + dateStr);
-            panel.add(textArea);*/
-          
-        }
-        
-    //Work on JPopups. Make button show and work. Make button able to update createGUI to add new time zone clock. Allow user input in JPopup add to timeZones Hashmap. 
+        frame.pack();
 
+        }
+      
+    //WORK ON THIS PART, UPDATE TIME!!!
+    private void updateArea() {
+		// TODO Auto-generated method stub
+
+    	
+    	
+    	
+        for(String s: timeZones.keySet()) {
+        	timeZone = timeZones.get(s);
+        	Calendar calendar = Calendar.getInstance(timeZone);
+        	String month  = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+        	String dayOfWeek = calendar.getDisplayName( Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
+        	dateStr = dayOfWeek + " " + month + " " +  calendar.get(Calendar.DAY_OF_MONTH) + " " + calendar.get(Calendar.YEAR);
+        	timeStr = " [" + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND) + "]";
+     
+        	
+        	  for(JTextArea b: myTextAreas) {
+        		  if(b.getText().contains(s)) {
+        		  b.setText(s  + timeStr + "\n" + dateStr);
+        		  }
+        }
+        	
+            
+        }
+      
+    	
+	}
+
+
+	//Work on JPopups. Make button show and work. Make button able to update createGUI to add new time zone clock. Allow user input in JPopup add to timeZones Hashmap. 
+
+    
+    
     @Override
     public void actionPerformed(ActionEvent arg0) {
-     
+        if(arg0.getSource() == timer) {
+        	//timeStr = " [" + drawGUI().calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND) + "]";
+        	//drawGUI();
+        	updateArea();
+        	
+        }
         
         if(button == arg0.getSource()) {
         	numOfClocks++;
@@ -165,10 +200,10 @@ public class WorldClocks implements ActionListener {
     	location = fixCapitalization(city, country);
     	
     	timeZone = clockUtil.getTimeZoneFromCityName(location);
-    	timeZones.put(city, timeZone);
+    	timeZones.put(location, timeZone);
     	
-    	
-    	
+    	//why not work?
+    	myTextAreas.clear();
     	frame.dispose();
     	drawGUI();
     	
@@ -178,35 +213,27 @@ public class WorldClocks implements ActionListener {
     String fixCapitalization(String city, String country) {
     	
     	String[] citySplit = city.split(" ");
-    	//String city1 = citySplit[1];
-    	//String city2 = citySplit[2];
+    	//String city1 = citySplit[0];
+    	//String city2 = citySplit[1];
+    	String capCity = "";
     	
     	for(int i = 0; i<citySplit.length; i++) {
-    		citySplit[i].charAt(0).toUpperCase();
-    		//this is definetly wrong, put you get the idea. I need to capitalize the first character of the string
+    		citySplit[i] = Character.toUpperCase(citySplit[i].charAt(0)) + citySplit[i].substring(1);
+    		capCity+=citySplit[i] + " ";
     	}
     	
+    	capCity = capCity.trim();
     	/////////////////// WORK ON FIXING THIS PART!!!  capitalize begining of each word of the city name
     	
-    	String endCityLetters = "";
-    	String firstCityLetter = city.substring(0);
-    	firstCityLetter.toUpperCase();
-    	for(int i = 1; i < city.length(); i++) {
-    		endCityLetters+=city.charAt(i);
+    	String[] countrySplit = country.split(" ");
+    	String capCountry = "";
+    	for(int i = 0; i<countrySplit.length; i++) {
+    		countrySplit[i] = Character.toUpperCase(countrySplit[i].charAt(0)) + countrySplit[i].substring(1);
+    		capCountry+=countrySplit[i] + " ";
     	}
+    	capCountry = capCountry.trim();
     	
-    	String fixedCity = firstCityLetter + endCityLetters;
-    	
-    	String endCountryLetters = "";
-    	String firstCountryLetter = country.substring(0);
-    	firstCountryLetter.toUpperCase();
-    	for (int i =  1; i<country.length(); i++) {
-    		endCountryLetters += country.charAt(i);
-    	}
-    	
-    	String fixedCountry = firstCountryLetter + endCountryLetters;
-    	
-    	String fixedLocation = fixedCity + ", " + fixedCountry;
+    	String fixedLocation = capCity + ", " + capCountry;
     	
     	return fixedLocation;
     
