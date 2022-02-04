@@ -60,9 +60,10 @@ public class WorldClocks implements ActionListener {
     String location;
     
     HashMap<String, TimeZone> timeZones = new HashMap<String, TimeZone>();
+
    // HashMap<String, String> timeStrings = new HashMap<String, String>();
     ArrayList<JTextArea> myTextAreas = new ArrayList<JTextArea>();
-    
+   
     public WorldClocks() {
         clockUtil = new ClockUtilities();
 
